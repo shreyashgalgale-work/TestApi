@@ -13,7 +13,7 @@ namespace TestApi.Tests
         [Fact]
         public void AlwaysFailTest()
         {
-            Assert.Equal(1, 2); // this will fail (for testing CI)
+            Assert.Equal(2, 2); // this will fail (for testing CI)
         }
     }
 }
