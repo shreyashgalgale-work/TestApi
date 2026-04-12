@@ -27,3 +27,25 @@ jobs:
 
     - name: Run tests
       run: dotnet test --configuration Release --verbosity normal
+
+  deploy:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Deploy to AWS VM
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_SSH_KEY }}
+        script: |
+          cd ~/TestApi
+          git pull origin main
+          dotnet publish -c Release -o out
+          
+          # Kill old app (if running)
+          pkill dotnet || true
+          
+          # Run new version
+          nohup dotnet out/TestApi.dll > app.log 2>&1 &
