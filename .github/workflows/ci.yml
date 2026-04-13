@@ -26,19 +26,19 @@ jobs:
       run: dotnet build --no-restore --configuration Release
 
     - name: Run tests
-      run: dotnet test --configuration Release --verbosity normal
-
-    - name: Debug structure
-      run: ls -R
+      run: dotnet test --no-build --configuration Release --verbosity normal
 
     - name: Build Docker image
-      run: docker build -t testapi:latest -f TestApi/Dockerfile TestApi
+      run: docker build -t testapi:latest -f ./Dockerfile .
 
   deploy:
     needs: build-and-test
     runs-on: ubuntu-latest
 
     steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
     - name: Deploy to AWS VM
       uses: appleboy/ssh-action@v1.0.3
       with:
@@ -48,7 +48,6 @@ jobs:
         script: |
           cd ~/TestApi
           git pull origin main
-          docker build -t testapi:latest -f TestApi/TestApi/Dockerfile .
-
+          docker build -t testapi:latest -f ./Dockerfile .
           docker rm -f testapi || true
           docker run -d --name testapi -p 8080:8080 --restart unless-stopped testapi:latest
