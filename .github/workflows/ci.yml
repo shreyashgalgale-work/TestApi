@@ -28,8 +28,13 @@ jobs:
     - name: Run tests
       run: dotnet test --configuration Release --verbosity normal
 
+    - name: Debug structure
+      run: ls -R
+      
     - name: Build Docker image
-      run: docker build -t testapi:latest -f TestApi/TestApi/Dockerfile .
+      run: |
+        cd TestApi/TestApi
+        docker build -t testapi:latest .
 
   deploy:
     needs: build-and-test
