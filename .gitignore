@@ -42,8 +42,8 @@ bld/
 msbuild.log
 msbuild.err
 msbuild.wrn
-
-# Node.js build artifacts
+ 
+# Node.js build ar tifacts
 node_modules/
 package-lock.json
 package.json
