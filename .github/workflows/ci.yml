@@ -28,6 +28,9 @@ jobs:
     - name: Run tests
       run: dotnet test --configuration Release --verbosity normal
 
+    - name: Build Docker image
+      run: docker build -t testapi:latest -f TestApi/TestApi/Dockerfile .
+
   deploy:
     needs: build-and-test
     runs-on: ubuntu-latest
@@ -42,10 +45,7 @@ jobs:
         script: |
           cd ~/TestApi
           git pull origin main
-          dotnet publish -c Release -o out 
-          
-          # Kill old app (if running)
-          pkill dotnet || true
-          
-          # Run new version
-          nohup dotnet out/TestApi.dll > app.log 2>&1 &
+          docker build -t testapi:latest -f TestApi/TestApi/Dockerfile .
+
+          docker rm -f testapi || true
+          docker run -d --name testapi -p 8080:8080 --restart unless-stopped testapi:latest
