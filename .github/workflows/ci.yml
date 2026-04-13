@@ -30,11 +30,9 @@ jobs:
 
     - name: Debug structure
       run: ls -R
-      
+
     - name: Build Docker image
-      run: |
-        cd TestApi/TestApi
-        docker build -t testapi:latest .
+      run: docker build -t testapi:latest -f TestApi/Dockerfile TestApi
 
   deploy:
     needs: build-and-test
