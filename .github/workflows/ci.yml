@@ -48,6 +48,6 @@ jobs:
         script: |
           cd ~/TestApi
           git pull origin main
-          docker build -t testapi:latest -f ./Dockerfile .
+          docker build -t testapi:latest -f ./TestApiDockerfile .
           docker rm -f testapi || true
           docker run -d --name testapi -p 8080:8080 --restart unless-stopped testapi:latest
