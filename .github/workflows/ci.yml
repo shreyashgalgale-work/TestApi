@@ -42,7 +42,7 @@ jobs:
         script: |
           cd ~/TestApi
           git pull origin main
-          dotnet publish -c Release -o out
+          dotnet publish -c Release -o out 
           
           # Kill old app (if running)
           pkill dotnet || true
