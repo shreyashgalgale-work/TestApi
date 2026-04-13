@@ -7,46 +7,38 @@ namespace TestApi.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
-        private static readonly string[] users = new[]
+        public class User
         {
-            {
-                name: "Shreyas",
-                age: 25,
-                gender: "Male"
-            },
-            {
-                name: "Rahul",
-                age: 33,
-                gender: "Male"
-            },
-            {
-                name: "Rahul",
-                age: 33,
-                gender: "Female"
-            },
-            {
-                name: "Vijay",
-                age: 24,
-                gender: "Male"
-            }
+            public string Name { get; set; }
+            public int Age { get; set; }
+            public string Gender { get; set; }
+        }
+
+        private static readonly User[] users = new[]
+        {
+            new User { Name = "Shreyas", Age = 25, Gender = "Male" },
+            new User { Name = "Rahul", Age = 33, Gender = "Male" },
+            new User { Name = "Rahul", Age = 33, Gender = "Female" },
+            new User { Name = "Vijay", Age = 24, Gender = "Male" }
         };
+
         private readonly ILogger<UserController> _logger;
 
         public UserController(ILogger<UserController> logger)
         {
             _logger = logger;
         }
+
         [HttpGet(Name = "GetUser")]
-        public string Get()
+        public User Get()
         {
             return users[new Random().Next(users.Length)];
         }
 
-        [HttpGet(Name = "GetUsers")]
+        [HttpGet("all", Name = "GetUsers")]
         public IEnumerable<string> GetUsers()
         {
-            return users.Select(u => u.name);
+            return users.Select(u => u.Name);
         }
-
     }
 }
